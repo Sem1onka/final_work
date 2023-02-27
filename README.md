@@ -91,7 +91,7 @@
        name varchar(30),
        group_id INT,
        FOREIGN KEY (group_id) REFERENCES AnimalGroup (id)
-       ON DELETE NO ACTION ON UPDATE CASCADE
+       ON DELETE CASCADE ON UPDATE CASCADE
    );
    
    CREATE TABLE KennelAnimal
@@ -101,7 +101,7 @@
        birthDate DATE,
        genius_id INT,
        FOREIGN KEY (genius_id) REFERENCES AnimalGenius (id)
-       ON DELETE NO ACTION ON UPDATE CASCADE
+       ON DELETE CASCADE ON UPDATE CASCADE
    );
    
    CREATE TABLE AnimalCommands
@@ -111,9 +111,9 @@
 
        PRIMARY KEY (animal_id, command_id),
        FOREIGN KEY (animal_id) REFERENCES KennelAnimal (id)
-        ON DELETE NO ACTION ON UPDATE CASCADE,
+        ON DELETE CASCADE ON UPDATE CASCADE,
        FOREIGN KEY (command_id) REFERENCES Commands (id)
-        ON DELETE NO ACTION  ON UPDATE CASCADE
+        ON DELETE CASCADE  ON UPDATE CASCADE
    );
    ```
 8. Заполнить низкоуровневые таблицы именами (животных), командами которые они выполняют и датами рождения
@@ -158,4 +158,15 @@
     (1, 3), (2, 3), (2, 4), (3, 4),
     (4, 5), (5, 1), (5, 4), (6, 2),
     (7, 1);
+   ```
+9. Удалив из таблицы верблюдов, т.к. верблюдов решили перевезти в другой
+   питомник на зимовку. Объединить таблицы лошади, и ослы в одну таблицу.
+   ```sql
+      USE HumanFriends;
+      DELETE FROM KennelAnimal WHERE genius_id = 2;
+   
+      CREATE TABLE HorseAndDonkey AS
+	  SELECT * from KennelAnimal WHERE genius_id = 1
+      UNION
+      SELECT * from KennelAnimal WHERE genius_id = 3;
    ```
