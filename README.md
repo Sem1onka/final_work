@@ -170,3 +170,22 @@
       UNION
       SELECT * from KennelAnimal WHERE genius_id = 3;
    ```
+10. Создать новую таблицу “молодые животные” в которую попадут все
+    животные старше 1 года, но младше 3 лет и в отдельном столбце с точностью
+    до месяца подсчитать возраст животных в новой таблице
+
+   ```sql
+      CREATE TABLE YoungAnimals AS
+         SELECT id, name, birthDate, 
+         datediff(curdate(),birthDate) DIV 31 as age, genius_id 
+         from KennelAnimal 
+         WHERE date_add(birthDate, INTERVAL 1 YEAR) < curdate() 
+               AND date_add(birthDate, INTERVAL 3 YEAR) > curdate();
+   ```
+11. Объединить все таблицы в одну, при этом сохраняя поля, указывающие на
+    прошлую принадлежность к старым таблицам.
+   ```sql
+      SELECT id, name, birthDate, genius_id FROM HorseDonkey
+      UNION
+      SELECT id, name, birthDate, genius_id FROM YoungAnimals;
+   ```
