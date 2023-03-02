@@ -1,8 +1,8 @@
 package com.rodini.kennel.util;
 
-import java.io.Closeable;
-import java.io.IOException;
-
+/**
+ * Счетчик для работы внутри блока try_with_resources
+ */
 public class Counter implements AutoCloseable {
     private int counter;
     private boolean closed;

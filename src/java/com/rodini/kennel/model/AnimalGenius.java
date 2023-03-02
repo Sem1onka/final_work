@@ -1,5 +1,8 @@
 package com.rodini.kennel.model;
 
+/**
+ * Перечисление, описывающее Род животного
+ */
 public enum AnimalGenius {
     DOG ("Собака"),
     CAT ("Кошка"),

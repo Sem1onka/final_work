@@ -12,6 +12,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Реализация интерфейса Storage
+ * Хранилище реализовано на HashMap
+ */
 public class KennelStorage implements Storage{
     Map<Integer, AbstractAnimal> dbAnimals = new HashMap<>();
 

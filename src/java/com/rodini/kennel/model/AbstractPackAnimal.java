@@ -2,6 +2,10 @@ package com.rodini.kennel.model;
 
 import java.time.LocalDate;
 
+
+/**
+ * Описывает абстрактное вьючное животное
+ */
 public abstract class AbstractPackAnimal extends AbstractAnimal {
     public static final int DEFAULT_LOAD_CAPACITY = 100;
 

@@ -6,6 +6,10 @@ import com.rodini.kennel.view.ConsoleView;
 import com.rodini.kennel.view.View;
 
 public class App {
+    /**
+     * Основной цикл приложения, где происходит обработка основных команд
+     * (добавть животное, показать команды животного, выписать из питомника)
+     */
     public static void run() {
         KennelAccounting kennelAccounting = new KennelAccounting(new KennelStorage());
         View view = new ConsoleView(kennelAccounting);
@@ -16,15 +20,15 @@ public class App {
             switch (code) {
                 case ADD_ANIMAL -> {
                     boolean result = view.showAddAnimalDialog();
-                    String resMessage = result ? "Animal added" : "Failed to add animal";
+                    String resMessage = result ? "Животное добавлено" : "Не удалось добавить животное";
                     System.out.println(resMessage);
                 }
                 case SHOW_SKILLS -> {
-                    view.showDetailInfoAnimal();
+                    view.showDetailInfoAnimalDialog();
                 }
                 case REMOVE_ANIMAL -> {
                     int removeId = view.showRemoveAnimalDialog();
-                    String resMessage = removeId > -1  ? "Remove animal " + removeId : "Failed removing animal";
+                    String resMessage = removeId > -1  ? "Выписано животное" + removeId : "Не удалось  выписать животное";
                     System.out.println(resMessage);
                 }
                 case EXIT -> {

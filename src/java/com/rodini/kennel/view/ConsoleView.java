@@ -112,7 +112,7 @@ public class ConsoleView implements View {
     }
 
     @Override
-    public void showDetailInfoAnimal() {
+    public void showDetailInfoAnimalDialog() {
         String infoMessage = String.format("Введите номер животного (1 - %d)", kennelAccounting.getAnimals().size());
         System.out.println(infoMessage);
         while (true) {
@@ -137,7 +137,7 @@ public class ConsoleView implements View {
             switch (code) {
                 case ADD_SKILL -> {
                     boolean result = showAddSkillDialog(animal);
-                    String resMessage = result ? "Skill is learned" : "Failed to learn skill";
+                    String resMessage = result ? "Команда добавлена" : "Ошибка при добавлении команды";
                     System.out.println(resMessage);
                     if (!result) return;
                 }

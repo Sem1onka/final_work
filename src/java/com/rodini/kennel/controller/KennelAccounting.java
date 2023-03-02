@@ -8,6 +8,9 @@ import com.rodini.kennel.storage.Storage;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Отвечает за взаимодействие View и Model
+ */
 public class KennelAccounting {
 
     private Storage dbKennel;

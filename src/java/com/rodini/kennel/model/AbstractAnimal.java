@@ -5,15 +5,28 @@ import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Описывает абстрактное животное
+ */
 public abstract class AbstractAnimal {
     private static int counter;
     private final int id = ++counter;
 
     private AnimalGenius animalGenius;
 
+    /**
+     * Имя животного
+     */
     private String name;
+
+    /**
+     * Дата рождения жиотного
+     */
     private LocalDate birthDate;
 
+    /**
+     * Список выполняемых команд животного
+     */
     private List<Skill> animalSkills;
 
     public int getId() {
@@ -55,11 +68,21 @@ public abstract class AbstractAnimal {
                 birthDate.getYear());
     }
 
+    /**
+     * Возвращает возраст живионого в месяцах
+     * @return возвраст
+     */
     public int getAge() {
         int years = Period.between(birthDate, LocalDate.now()).getYears();
         int months = Period.between(birthDate, LocalDate.now()).getMonths();
         return years * 12 + months;
     }
+
+    /**
+     * Добавляет новую команду
+     * @param newSkill команды
+     * @return true в случае успеха или false - в противном
+     */
     public boolean learnSkill(Skill newSkill) {
         if (animalSkills.contains(newSkill)){
             return false;
