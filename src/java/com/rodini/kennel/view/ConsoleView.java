@@ -4,6 +4,7 @@ import com.rodini.kennel.controller.KennelAccounting;
 import com.rodini.kennel.model.AbstractAnimal;
 import com.rodini.kennel.model.AnimalGenius;
 import com.rodini.kennel.model.Skill;
+import com.rodini.kennel.util.Counter;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -19,6 +20,7 @@ public class ConsoleView implements View {
     public static final String ROW_FORMAT = "%-6d%-16s%-20s%-20d%-20s";
     public static final String COLUMN_HEADER_FORMAT = "%-6s%-16s%-20s%-20s%-20s";
     public static final String RED_COLOR = "\u001B[31m";
+    public static final String GREEN_COLOR = "\u001B[32m";
     private final KennelAccounting kennelAccounting;
     private Scanner scanner;
 
@@ -31,7 +33,7 @@ public class ConsoleView implements View {
     public void showKennelRegistry() {
         clearConsole();
         printLineWithSymbol("=", SIZE_LINE);
-        printCaption("Питомник животных", " ");
+        printCaption("Питомник животных (Демо версия)", " ");
         printLineWithSymbol("=", SIZE_LINE);
         printRegistryHeader();
         printLineWithSymbol("-", SIZE_LINE);
@@ -49,12 +51,18 @@ public class ConsoleView implements View {
     @Override
     public MainMenuCommand showMainMenuWithResult() {
         String menu = String.format(
-                "%d-[Добавить]\t%d-[Показать]\t%d-[Удалить]\t%d-[Выйти]\n",
-                MainMenuCommand.ADD_ANIMAL.ordinal(), MainMenuCommand.SHOW_ANIMAL.ordinal(),
-                MainMenuCommand.REMOVE_ANIMAL.ordinal(), MainMenuCommand.EXIT.ordinal());
+                "%d-[%s]\t%d-[%s]\t%d-[%s]\t%d-[%s]\n",
+                MainMenuCommand.ADD_ANIMAL.ordinal(),
+                MainMenuCommand.ADD_ANIMAL.getTag(),
+                MainMenuCommand.SHOW_SKILLS.ordinal(),
+                MainMenuCommand.SHOW_SKILLS.getTag(),
+                MainMenuCommand.REMOVE_ANIMAL.ordinal(),
+                MainMenuCommand.REMOVE_ANIMAL.getTag(),
+                MainMenuCommand.EXIT.ordinal(),
+                MainMenuCommand.EXIT.getTag());
         printLineWithSymbol("=", SIZE_LINE);
-        System.out.println("Доступные действия:");
-        System.out.print(menu);
+        printColorLine("Доступные действия:", GREEN_COLOR);
+        printColorLine(menu, GREEN_COLOR);
         while (true) {
             try {
                 System.out.printf("%s (%d - %d): ", "Выберите действие: ", MainMenuCommand.ADD_ANIMAL.ordinal(),
@@ -74,7 +82,8 @@ public class ConsoleView implements View {
                 "род_животного может принимать значения: " + Arrays.asList(AnimalGenius.values());
         System.out.println(infoMessage);
         while (true) {
-            try {
+            Counter counter = new Counter();
+            try (counter){
                 System.out.print("Ввод: ");
                 scanner = new Scanner(System.in);
                 String[] animalData = scanner.nextLine().split(" ");
@@ -88,11 +97,14 @@ public class ConsoleView implements View {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
                 LocalDate birthDay = LocalDate.parse(animalData[1], formatter);
                 AnimalGenius genius = AnimalGenius.valueOf(animalData[2].toUpperCase());
-
+                counter.add();
                 return kennelAccounting.createAnimal(animalName, birthDay, genius);
             } catch (DateTimeParseException e) {
                 System.out.println("Неправильный формат даты рождения");
             } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
+            catch (RuntimeException e) {
                 System.out.println(e.getMessage());
             }
 
@@ -119,8 +131,8 @@ public class ConsoleView implements View {
 
     @Override
     public void showAnimalInfo(AbstractAnimal animal) {
-        printAnimalInfo(animal);
         while (true) {
+            printAnimalInfo(animal);
             AddSkillMenuCommand code = showAddSkillMenu(animal);
             switch (code) {
                 case ADD_SKILL -> {
@@ -134,17 +146,17 @@ public class ConsoleView implements View {
                 }
             }
         }
-
     }
 
     @Override
     public AddSkillMenuCommand showAddSkillMenu(AbstractAnimal animal) {
         String menu = String.format(
-                "%d-[Обучить команде]\t%d-[Выйти]\n",
-                AddSkillMenuCommand.ADD_SKILL.ordinal(), AddSkillMenuCommand.EXIT.ordinal());
+                "%d-[%s]\t%d-[%s]\n",
+                AddSkillMenuCommand.ADD_SKILL.ordinal(), AddSkillMenuCommand.ADD_SKILL.getTag(),
+                AddSkillMenuCommand.EXIT.ordinal(), AddSkillMenuCommand.EXIT.getTag()) ;
         printLineWithSymbol("=", SIZE_LINE);
-        System.out.println("Доступные действия:");
-        System.out.print(menu);
+        printColorLine("Доступные действия:", GREEN_COLOR);
+        printColorLine(menu, GREEN_COLOR);
         while (true) {
             try {
                 System.out.printf("%s (%d - %d): ", "Выберите действие: ", AddSkillMenuCommand.ADD_SKILL.ordinal(),
@@ -159,18 +171,18 @@ public class ConsoleView implements View {
 
     @Override
     public boolean showAddSkillDialog(AbstractAnimal animal) {
-        System.out.println("Введите данные в виде \"команда <описание>\"");
+        System.out.println("Введите данные в виде \"команда <:описание>\"");
         scanner = new Scanner(System.in);
         String input = scanner.nextLine();
         if (input.isBlank()) return false;
-        String[] skillData = input.split(" ");
+        String[] skillData = input.split(":");
         if (skillData.length == 1) {
             animal.learnSkill(new Skill(skillData[0]));
         } else if (skillData.length == 2) {
             animal.learnSkill(new Skill(skillData[0], skillData[1]));
         } else {
             System.out.println("Слишком много параметров");
-            return  false;
+            return false;
         }
         return true;
     }

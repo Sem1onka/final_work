@@ -4,15 +4,35 @@ import com.rodini.kennel.model.AbstractAnimal;
 
 public interface View {
     enum MainMenuCommand {
-        ADD_ANIMAL,
-        SHOW_ANIMAL,
-        REMOVE_ANIMAL,
-        EXIT
+        ADD_ANIMAL ("Добавить животное"),
+        SHOW_SKILLS("Показать команды"),
+        REMOVE_ANIMAL ("Выписать животное"),
+        EXIT ("Выйти");
+
+        private String tag;
+
+        MainMenuCommand(String tag) {
+            this.tag = tag;
+        }
+
+        public String getTag() {
+            return tag;
+        }
     }
 
     enum AddSkillMenuCommand {
-        ADD_SKILL,
-        EXIT
+        ADD_SKILL ("Обучить команде"),
+        EXIT ("Выйти");
+
+        private String tag;
+
+        AddSkillMenuCommand(String tag) {
+            this.tag = tag;
+        }
+
+        public String getTag() {
+            return tag;
+        }
     }
     void showKennelRegistry();
 
