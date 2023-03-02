@@ -1,21 +1,37 @@
 package com.rodini.kennel;
 
-import com.rodini.kennel.module.AbstractPet;
-import com.rodini.kennel.module.Cat;
-import com.rodini.kennel.module.Command;
-
-import java.time.LocalDate;
+import com.rodini.kennel.controller.KennelAccounting;
+import com.rodini.kennel.storage.KennelStorage;
+import com.rodini.kennel.view.ConsoleView;
+import com.rodini.kennel.view.View;
 
 public class App {
-    public static void main(String[] args) {
-        AbstractPet pet_1 = new Cat("qqq", LocalDate.now());
-        pet_1.learnSkill(new Command("Mur mur"));
-        pet_1.learnSkill(new Command("Sleep"));
-        System.out.println(pet_1.getAnimalCommands());
-        System.out.println(pet_1.getId()+ " " + pet_1.getName());
-        AbstractPet pet_2 = new Cat("aaa", LocalDate.now());
-        System.out.println(pet_2.getId()+ " " + pet_2.getName());
-        AbstractPet pet_3 = new Cat("ddd", LocalDate.now());
-        System.out.println(pet_3.getId() + " " + pet_3.getName());
+    public static void run() {
+        KennelAccounting kennelAccounting = new KennelAccounting(new KennelStorage());
+        View view = new ConsoleView(kennelAccounting);
+
+        while (true) {
+            view.showKennelRegistry();
+            View.MainMenuCommand code = view.showMainMenuWithResult();
+            switch (code) {
+                case ADD_ANIMAL -> {
+                    boolean result = view.showAddAnimalDialog();
+                    String resMessage = result ? "Animal added" : "Failed to add animal";
+                    System.out.println(resMessage);
+                }
+                case SHOW_SKILLS -> {
+                    view.showDetailInfoAnimal();
+                }
+                case REMOVE_ANIMAL -> {
+                    int removeId = view.showRemoveAnimalDialog();
+                    String resMessage = removeId > -1  ? "Remove animal " + removeId : "Failed removing animal";
+                    System.out.println(resMessage);
+                }
+                case EXIT -> {
+                    System.out.println("See you... )");
+                    return;
+                }
+            }
+        }
     }
 }
