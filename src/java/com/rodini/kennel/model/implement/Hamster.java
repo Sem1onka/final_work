@@ -5,9 +5,9 @@ import com.rodini.kennel.model.AnimalGenius;
 
 import java.time.LocalDate;
 
-public class Dog extends AbstractPet {
-    public Dog(String name, LocalDate birthDate) {
+public class Hamster extends AbstractPet {
+    public Hamster(String name, LocalDate birthDate) {
         super(name, birthDate);
-        setAnimalGenius(AnimalGenius.DOG);
+        setAnimalGenius(AnimalGenius.HAMSTER);
     }
 }

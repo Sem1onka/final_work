@@ -1,4 +1,4 @@
-package com.rodini.kennel.module;
+package com.rodini.kennel.model;
 
 /**
  * Команда

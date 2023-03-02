@@ -1,9 +1,13 @@
-package com.rodini.kennel.module;
+package com.rodini.kennel.model;
 
 import java.time.LocalDate;
 
 public abstract class AbstractPackAnimal extends AbstractAnimal {
     public static final int DEFAULT_LOAD_CAPACITY = 100;
+
+    /**
+     * Грузоподъемность животного, кг
+     */
     private  int loadCapacity;
 
 

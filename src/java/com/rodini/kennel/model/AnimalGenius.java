@@ -1,5 +1,19 @@
-package com.rodini.kennel.module;
+package com.rodini.kennel.model;
 
 public enum AnimalGenius {
-    DOG, CAT, HAMSTER, HORSE, CAMEL, DONKEY
+    DOG ("Собака"),
+    CAT ("Кошка"),
+    HAMSTER ("Хомяк"),
+    HORSE ("Лошадь"),
+    CAMEL ("Верблюд"),
+    DONKEY ("Осёл");
+
+    private String title;
+    AnimalGenius(String title) {
+        this.title = title;
+    }
+
+    public String getTitle() {
+        return title;
+    }
 }
