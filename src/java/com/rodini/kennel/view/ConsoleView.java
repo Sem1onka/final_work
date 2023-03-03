@@ -29,6 +29,8 @@ public class ConsoleView implements View {
         scanner = new Scanner(System.in);
     }
 
+    record AnimalData(String name, LocalDate birthDate, AnimalGenius animalGenius){}
+
     @Override
     public void showKennelRegistry() {
         clearConsole();
@@ -86,19 +88,10 @@ public class ConsoleView implements View {
             try (counter){
                 System.out.print("Ввод: ");
                 scanner = new Scanner(System.in);
-                String[] animalData = scanner.nextLine().split(" ");
-                if (animalData.length < 3) {
-                    throw new IllegalArgumentException("Недостаточное количество данных");
-                }
-                if (animalData.length > 3) {
-                    throw new IllegalArgumentException("Слишком много данных");
-                }
-                String animalName = animalData[0];
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-                LocalDate birthDay = LocalDate.parse(animalData[1], formatter);
-                AnimalGenius genius = AnimalGenius.valueOf(animalData[2].toUpperCase());
+                String inputData = scanner.nextLine();
+                AnimalData parsedData = parceAnimalData(inputData);
                 counter.add();
-                return kennelAccounting.createAnimal(animalName, birthDay, genius);
+                return kennelAccounting.createAnimal(parsedData.name, parsedData.birthDate, parsedData.animalGenius);
             } catch (DateTimeParseException e) {
                 System.out.println("Неправильный формат даты рождения");
             } catch (IllegalArgumentException e) {
@@ -204,6 +197,29 @@ public class ConsoleView implements View {
         }
     }
 
+    /**
+     * Распарсивает входные данные при добавлении животного
+     * @param inputData Входная строка имеет вид "имя_животного дата_рождения род_животного"
+     *                  имя_животного - не содержит пробелов
+     *                  дата_рождения - имеет фоормат dd-MM-yyyy (12-03-2022)
+     *                  род_животного - содержит значения из пепечисления AnimalGenius
+     * @return возвращает record AnimalData, содержащую провалидированные параметры животного
+     */
+    private AnimalData parceAnimalData(String inputData) {
+        String[] input = inputData.split(" ");
+
+        if (input.length < 3) {
+            throw new IllegalArgumentException("Недостаточное количество данных");
+        }
+        if (input.length > 3) {
+            throw new IllegalArgumentException("Слишком много данных");
+        }
+        String animalName = input[0];
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate birthDay = LocalDate.parse(input[1], formatter);
+        AnimalGenius genius = AnimalGenius.valueOf(input[2].toUpperCase());
+        return new AnimalData(animalName, birthDay, genius);
+    }
     private void clearConsole() {
         System.out.print("\033[H\033[J");
     }
